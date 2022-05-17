@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
 
     # train data
-    trainData = CustomImageDataset("./dataset", "./dataset/train10.txt", imgTransform, labelTransform)
+    trainData = CustomImageDataset("./dataset", "dataset/dataset/train10.txt", imgTransform, labelTransform)
     traindata = DataLoader(trainData, batch_size=4, shuffle=True)
 
     data = next(iter(trainData))

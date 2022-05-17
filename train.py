@@ -34,10 +34,10 @@ parser.add_argument(
     choices=['Ascend', 'GPU', 'CPU'],
     help='device where the code will be implemented (default: Ascend)')
 
-parser.add_argument('--classes', default=11, help='--epoch')
-parser.add_argument('--learning_rate', default=1e-1, help="learning_rate")
-parser.add_argument('--batch_size', default=4, help='batch_size')
-parser.add_argument('--epoch', default=1, help='--epoch')
+parser.add_argument('--classes', default='11', help='--epoch')
+parser.add_argument('--learning_rate', default='1e-1', help="learning_rate")
+parser.add_argument('--batch_size', default='4', help='batch_size')
+parser.add_argument('--epoch', default='1', help='--epoch')
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -50,26 +50,27 @@ if __name__ == '__main__':
 
 
     def labelTransform(x):
-        return F.one_hot(torch.tensor(eval(x)), num_classes=args.classes)
+        return F.one_hot(torch.tensor(eval(x)), num_classes=eval(args.classes))
 
 
     # train data
     trainData = CustomImageDataset("/dataset/dataset", "/dataset/dataset/train10.txt", imgTransform, labelTransform)
-    trainData = DataLoader(trainData, batch_size=args.batch_size, shuffle=True)
+    trainData = DataLoader(trainData, batch_size=eval(args.batch_size), shuffle=True)
     valData = CustomImageDataset("/dataset/dataset", "/dataset/dataset/val10.txt", imgTransform, labelTransform)
-    valData = DataLoader(valData, batch_size=args.batch_size, shuffle=True)
+    valData = DataLoader(valData, batch_size=eval(args.batch_size), shuffle=True)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print(device)
 
-    net = AlexNet(args.classes).to(device)
+    net = AlexNet(eval(args.classes)).to(device)
 
-    optimizer = torch.optim.SGD(net.parameters(), lr=args.learning_rate)
+    optimizer = torch.optim.SGD(net.parameters(), lr=eval(args.learning_rate))
 
     loss_fn = nn.CrossEntropyLoss()
 
-    print('epoch_size is:{}'.format(args.epoch))
+    print('epoch_size is:{}'.format(eval(args.epoch)))
     loss_data = []
-    for epoch in range(args.epoch):
+    for epoch in range(eval(args.epoch)):
         loss_epoch_data = []
         for batch, (X, y) in enumerate(trainData):
             # compute prediction and loss
