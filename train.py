@@ -56,10 +56,10 @@ if __name__ == '__main__':
     # train data
     trainData = CustomImageDataset("/dataset/dataset", "/dataset/dataset/train10.txt", imgTransform, labelTransform)
     trainData = DataLoader(trainData, batch_size=args.batch_size, shuffle=True)
-    valData = CustomImageDataset("/dataset/datatest", "/dataset/dataset/val10.txt", imgTransform, labelTransform)
+    valData = CustomImageDataset("/dataset/dataset", "/dataset/dataset/val10.txt", imgTransform, labelTransform)
     valData = DataLoader(valData, batch_size=args.batch_size, shuffle=True)
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     net = AlexNet(args.classes).to(device)
 
@@ -73,8 +73,8 @@ if __name__ == '__main__':
         loss_epoch_data = []
         for batch, (X, y) in enumerate(trainData):
             # compute prediction and loss
-            pred = net.forward(X)
-            loss = loss_fn(pred, y.float())
+            pred = net.forward(X.to(device))
+            loss = loss_fn(pred.to(device), y.float().to(device))
 
             # backpropagation
             optimizer.zero_grad()
@@ -89,4 +89,3 @@ if __name__ == '__main__':
     locale_time = time.strftime('%Y_%m_%d_%H_%M_%S', time.localtime())
     np.savetxt(locale_time + ".csv", trainLoss)
     torch.save(net, '/model/' + 'AlexNet_' + locale_time + '.pth')
-    # 把训练后的模型数据从本地的运行环境拷贝回obs，在启智平台相对应的训练任务中会提供下载
