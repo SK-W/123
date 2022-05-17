@@ -54,9 +54,9 @@ if __name__ == '__main__':
 
 
     # train data
-    trainData = CustomImageDataset("./dataset", "./dataset/train10.txt", imgTransform, labelTransform)
+    trainData = CustomImageDataset("/dataset/dataset", "/dataset/dataset/train10.txt", imgTransform, labelTransform)
     trainData = DataLoader(trainData, batch_size=args.batch_size, shuffle=True)
-    valData = CustomImageDataset("./dataset", "./dataset/val10.txt", imgTransform, labelTransform)
+    valData = CustomImageDataset("/dataset/datatest", "/dataset/dataset/val10.txt", imgTransform, labelTransform)
     valData = DataLoader(valData, batch_size=args.batch_size, shuffle=True)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
