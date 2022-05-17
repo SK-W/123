@@ -19,6 +19,21 @@ from dataset import CustomImageDataset
 from net import AlexNet
 
 parser = argparse.ArgumentParser(description="AlexNet Traing Parameters")
+parser.add_argument('--data_url',
+                    help='path to training/inference dataset folder',
+                    default='./data')
+
+parser.add_argument('--train_url',
+                    help='model folder to save/load',
+                    default='./model')
+
+parser.add_argument(
+    '--device_target',
+    type=str,
+    default="Ascend",
+    choices=['Ascend', 'GPU', 'CPU'],
+    help='device where the code will be implemented (default: Ascend)')
+
 parser.add_argument('--classes', default=11, help='--epoch')
 parser.add_argument('--learning_rate', default=1e-1, help="learning_rate")
 parser.add_argument('--batch_size', default=4, help='batch_size')
@@ -73,6 +88,5 @@ if __name__ == '__main__':
     trainLoss = np.array(loss_data).T
     locale_time = time.strftime('%Y_%m_%d_%H_%M_%S', time.localtime())
     np.savetxt(locale_time + ".csv", trainLoss)
-    # torch.save(net, 'AlexNet_' + locale_time + '.pth')
-
-    print('train finish')
+    torch.save(net, '/model/' + 'AlexNet_' + locale_time + '.pth')
+    # 把训练后的模型数据从本地的运行环境拷贝回obs，在启智平台相对应的训练任务中会提供下载
