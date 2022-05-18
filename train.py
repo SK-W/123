@@ -38,6 +38,7 @@ parser.add_argument('--classes', default='11', help='--epoch')
 parser.add_argument('--learning_rate', default='1e-1', help="learning_rate")
 parser.add_argument('--batch_size', default='4', help='batch_size')
 parser.add_argument('--epoch', default='1', help='--epoch')
+parser.add_argument('--save_path', default='/model', help='--epoch')
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -60,7 +61,7 @@ if __name__ == '__main__':
     valData = DataLoader(valData, batch_size=eval(args.batch_size), shuffle=True)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print(device)
+
 
     net = AlexNet(eval(args.classes)).to(device)
 
@@ -88,5 +89,5 @@ if __name__ == '__main__':
 
     trainLoss = np.array(loss_data).T
     locale_time = time.strftime('%Y_%m_%d_%H_%M_%S', time.localtime())
-    np.savetxt('/model/' + locale_time + ".csv", trainLoss, delimiter=",")
-    torch.save(net, '/model/' + 'AlexNet_' + locale_time + '.pth')
+    np.savetxt(args.save_path + '/' + locale_time + '.csv', trainLoss, delimiter=',')
+    torch.save(net, args.save_path + '/' + 'AlexNet_' + locale_time + '.pth')
