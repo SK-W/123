@@ -88,5 +88,5 @@ if __name__ == '__main__':
 
     trainLoss = np.array(loss_data).T
     locale_time = time.strftime('%Y_%m_%d_%H_%M_%S', time.localtime())
-    np.savetxt('/model/' + locale_time + ".csv", trainLoss)
+    np.savetxt('/model/' + locale_time + ".csv", trainLoss, delimiter=",")
     torch.save(net, '/model/' + 'AlexNet_' + locale_time + '.pth')
